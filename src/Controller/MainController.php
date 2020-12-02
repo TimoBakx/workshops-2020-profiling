@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\AgreeToUpdatedTermsFormType;
 use App\GitHub\GitHubApiHelper;
 use App\Repository\BigFootSightingRepository;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -67,10 +68,11 @@ class MainController extends AbstractController
     /**
      * @Route("/sighting/{id}", name="app_sighting_show")
      */
-    public function showSighting(BigFootSighting $bigFootSighting)
+    public function showSighting(BigFootSighting $bigFootSighting, CommentRepository $commentRepository)
     {
         return $this->render('main/sighting_show.html.twig', [
-            'sighting' => $bigFootSighting
+            'sighting' => $bigFootSighting,
+            'comments' => $commentRepository->getCommentsForSighting($bigFootSighting)
         ]);
     }
 

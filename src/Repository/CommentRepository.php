@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\BigFootSighting;
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\User;
 
@@ -60,4 +62,20 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getCommentsForSighting(BigFootSighting $sighting)
+    {
+        return $this->createQueryBuilder('c')
+            ->select(['c.createdAt', 'c.content'])
+            ->addSelect('o.username AS owner_username')
+            ->addSelect('o.email AS owner_email')
+            ->addSelect('COUNT(oc.id) AS owner_activity_count')
+            ->join('c.owner', 'o')
+            ->join('o.comments', 'oc', Join::WITH, 'oc.createdAt >= :commentCountLimit')
+            ->where('c.bigFootSighting = :sighting')
+            ->setParameter('sighting', $sighting)
+            ->setParameter('commentCountLimit', new \DateTimeImmutable('-3 months'))
+            ->groupBy('c, o')
+            ->getQuery()
+            ->getResult();
+    }
 }

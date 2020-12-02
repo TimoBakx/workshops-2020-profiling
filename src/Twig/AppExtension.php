@@ -24,10 +24,8 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    public function getUserActivityText(User $user): string
+    public function getUserActivityText(int $commentCount): string
     {
-        $commentCount = $this->commentHelper->countRecentCommentsForUser($user);
-
         if ($commentCount > 50) {
             return 'bigfoot fanatic';
         }
