@@ -31,11 +31,11 @@ class UpdateSightingScoresCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $sightings = $this->bigFootSightingRepository->findAll();
+        $sightings = $this->bigFootSightingRepository->findBy([], [], 120);
         $io->progressStart(count($sightings));
         foreach ($sightings as $sighting) {
             $io->progressAdvance();
@@ -49,5 +49,7 @@ class UpdateSightingScoresCommand extends Command
             $this->entityManager->flush();
         }
         $io->progressFinish();
+
+        return 0;
     }
 }
