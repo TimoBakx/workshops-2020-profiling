@@ -3,3 +3,8 @@ tests:
         path: "/"
         assertions:
             - "main.wall_time < 200ms"
+
+    "The comments should not be loaded in separate queries":
+        path: "/sighting/.*"
+        assertions:
+            - "metrics.sql.queries.count < 5"
