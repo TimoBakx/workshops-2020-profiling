@@ -21,5 +21,6 @@ tests:
 
     "UnitOfWork should not be overworked":
         path: ".*"
+        command: ".*"
         assertions:
             - "metrics.unit_of_work.compute_change_set.count < 100000"
