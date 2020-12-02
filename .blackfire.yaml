@@ -1,3 +1,13 @@
+metrics:
+    unit_of_work.compute_change_set:
+        label: 'UnitOfWork ComputeChangeSets'
+        description: 'Metric for amount of times UnitOfWork ComputeChangeSet is called'
+
+        matching_calls:
+            php:
+                -
+                    callee: "=Doctrine\\ORM\\UnitOfWork::computeChangeSets"
+
 tests:
     "The homepage should be fast":
         path: "/"
@@ -8,3 +18,8 @@ tests:
         path: "/sighting/.*"
         assertions:
             - "metrics.sql.queries.count < 5"
+
+    "UnitOfWork should not be overworked":
+        path: ".*"
+        assertions:
+            - "metrics.unit_of_work.compute_change_set.count < 100000"
