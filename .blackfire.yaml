@@ -1,12 +1,12 @@
 metrics:
     unit_of_work.compute_change_set:
-        label: 'UnitOfWork ComputeChangeSets'
+        label: 'UnitOfWork ComputeChangeSet'
         description: 'Metric for amount of times UnitOfWork ComputeChangeSet is called'
 
         matching_calls:
             php:
                 -
-                    callee: "=Doctrine\\ORM\\UnitOfWork::computeChangeSets"
+                    callee: "=Doctrine\\ORM\\UnitOfWork::computeChangeSet"
 
 tests:
     "The homepage should be fast":
