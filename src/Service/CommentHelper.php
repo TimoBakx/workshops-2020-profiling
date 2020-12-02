@@ -3,20 +3,25 @@
 namespace App\Service;
 
 use App\Entity\User;
+use App\Repository\CommentRepository;
 
 class CommentHelper
 {
+    /**
+     * @var CommentRepository
+     */
+    private $repository;
+
+    public function __construct(CommentRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     public function countRecentCommentsForUser(User $user): int
     {
-        $comments = $user->getComments();
-        $commentCount = 0;
-        $recentDate = new \DateTimeImmutable('-3 months');
-        foreach ($comments as $comment) {
-            if ($comment->getCreatedAt() > $recentDate) {
-                $commentCount++;
-            }
-        }
-
-        return $commentCount;
+        return $this->repository->countForUser(
+            $user,
+            new \DateTimeImmutable('-3 months')
+        );
     }
 }
